@@ -1,0 +1,77 @@
+{{ if eq (include "resource.app.unique" .) "false" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: capo-controller-manager
+    cluster.x-k8s.io/provider: infrastructure-openstack
+    {{- include "labels.infrastructure" . | nindent 4 }}
+  name: {{ include "resource.default.name" . }}
+  namespace: {{ include "resource.default.namespace" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: capo-controller-manager
+      {{- include "labels.infrastructure" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        component: capo-controller-manager
+        {{- include "labels.infrastructure" . | nindent 8 }}
+    spec:
+      containers:
+      - args:
+        - --leader-elect
+        - --v=2
+        command:
+        - /manager
+        image: "{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name }}:{{ .Values.tag }}"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: healthz
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: manager
+        ports:
+        - containerPort: {{ .Values.ports.metrics }}
+          name: http
+          protocol: TCP
+        - containerPort: {{ .Values.ports.healthz }}
+          name: healthz
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: healthz
+            scheme: HTTP
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      securityContext:
+        fsGroup: 1000
+      serviceAccountName: {{ include "resource.default.name" . }}
+      serviceAccount: {{ include "resource.default.name" . }}
+
+      terminationGracePeriodSeconds: 10
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: capo-webhook-service-cert
+{{ end }}

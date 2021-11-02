@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: capo-controller-manager-webhook
+    {{- include "labels.infrastructure" . | nindent 4 }}
+  name: {{ include "resource.default.name" . }}-webhook
+  namespace: {{ include "resource.default.namespace" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: capo-controller-manager-webhook
+      {{- include "labels.infrastructure" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        component: capo-controller-manager-webhook
+        {{- include "labels.infrastructure" . | nindent 8 }}
+    spec:
+      containers:
+      - args:
+        - --metrics-addr=0.0.0.0:{{ .Values.ports.metrics }}
+        - --webhook-port={{ .Values.ports.webhook }}
+        - --feature-gates=EKS=true,EKSEnableIAM={{ .Values.featuregates.eksenableiam }},MachinePool={{ .Values.featuregates.machinepool }},EventBridgeInstanceState={{ .Values.featuregates.eventbridgeinstancestate }},AutoControllerIdentityCreator={{ .Values.featuregates.autocontrolleridentitycreator }}
+        image: "{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name }}:{{ .Values.tag }}"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: healthz
+        name: manager
+        ports:
+        - containerPort: {{ .Values.ports.webhook }}
+          name: webhook-server
+          protocol: TCP
+        - containerPort: {{ .Values.ports.healthz }}
+          name: healthz
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: healthz
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      terminationGracePeriodSeconds: 10
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: {{ include "resource.default.name" . }}-webhook

@@ -1,0 +1,47 @@
+name: cluster-api-provider-openstack
+tag: v0.4.0
+
+
+project:
+  branch: "[[ .Branch ]]"
+  commit: "[[ .SHA ]]"
+
+
+name: cluster-api-provider-openstack
+tag: v0.4.0
+
+infrastructure:
+  image:
+    name: giantswarm/cluster-api-openstack-controller
+eks:
+  bootstrap:
+    image:
+      name: giantswarm/eks-bootstrap-controller
+  controlplane:
+    image:
+      name: giantswarm/eks-controlplane-controller
+
+crdConvertOnly: true
+
+featuregates:
+
+
+ports:
+  healthz: 9440
+  metrics: 8080
+  webhook: 9443
+
+project:
+  branch: "[[ .Branch ]]"
+  commit: "[[ .SHA ]]"
+
+watchfilter: capi
+
+serviceType: managed
+
+registry:
+  domain: docker.io
+
+workloadCluster:
+  ssh:
+    ssoPublicKey: 'ssh-rsa AAASbn3n fake@giantswarm'
