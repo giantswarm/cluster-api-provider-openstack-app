@@ -45,7 +45,7 @@ spec:
         name: manager
         ports:
         - containerPort: {{ .Values.ports.metrics }}
-          name: http
+          name: metrics
           protocol: TCP
         - containerPort: {{ .Values.ports.healthz }}
           name: healthz
@@ -54,24 +54,41 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
-            scheme: HTTP
+            scheme: HTTP    
         volumeMounts:
-        - mountPath: /tmp/k8s-webhook-server/serving-certs
-          name: cert
-          readOnly: true
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
+          - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+            name: capo-manager-token-6ddl7
+            readOnly: true
       securityContext:
         fsGroup: 1000
       serviceAccountName: {{ include "resource.default.name" . }}
       serviceAccount: {{ include "resource.default.name" . }}
-
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
       terminationGracePeriodSeconds: 10
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
 
       volumes:
-      - name: cert
-        secret:
-          defaultMode: 420
-          secretName: capo-webhook-service-cert
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: capo-webhook-service-cert
+        - name: capo-manager-token-6ddl7
+          secret:
+            defaultMode: 420
+            secretName: capo-manager-token-6ddl7
 {{ end }}

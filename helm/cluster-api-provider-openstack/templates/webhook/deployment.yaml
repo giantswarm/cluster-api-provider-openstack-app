@@ -1,8 +1,10 @@
+{{ if eq (include "resource.app.unique" .) "false" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    component: capo-controller-manager-webhook
+    component: capo-controller-manager
+    cluster.x-k8s.io/provider: infrastructure-openstack
     {{- include "labels.infrastructure" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}-webhook
   namespace: {{ include "resource.default.namespace" . }}
@@ -10,25 +12,36 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      component: capo-controller-manager-webhook
+      component: capo-controller-manager
       {{- include "labels.infrastructure" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        component: capo-controller-manager-webhook
+        component: capo-controller-manager
         {{- include "labels.infrastructure" . | nindent 8 }}
     spec:
       containers:
       - args:
-        - --metrics-addr=0.0.0.0:{{ .Values.ports.metrics }}
-        - --webhook-port={{ .Values.ports.webhook }}
-        - --feature-gates=EKS=true,EKSEnableIAM={{ .Values.featuregates.eksenableiam }},MachinePool={{ .Values.featuregates.machinepool }},EventBridgeInstanceState={{ .Values.featuregates.eventbridgeinstancestate }},AutoControllerIdentityCreator={{ .Values.featuregates.autocontrolleridentitycreator }}
+        - --leader-elect
+        - --v=2
+        command:
+        - /manager
         image: "{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name }}:{{ .Values.tag }}"
         imagePullPolicy: IfNotPresent
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /healthz
             port: healthz
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
         name: manager
         ports:
         - containerPort: {{ .Values.ports.webhook }}
@@ -41,16 +54,41 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
+            scheme: HTTP    
         volumeMounts:
-        - mountPath: /tmp/k8s-webhook-server/serving-certs
-          name: cert
-          readOnly: true
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
+          - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+            name: capo-manager-token-6ddl7
+            readOnly: true
+      securityContext:
+        fsGroup: 1000
+      serviceAccountName: {{ include "resource.default.name" . }}
+      serviceAccount: {{ include "resource.default.name" . }}
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
       terminationGracePeriodSeconds: 10
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
+
       volumes:
-      - name: cert
-        secret:
-          defaultMode: 420
-          secretName: {{ include "resource.default.name" . }}-webhook
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: capo-webhook-service-cert
+        - name: capo-manager-token-6ddl7
+          secret:
+            defaultMode: 420
+            secretName: capo-manager-token-6ddl7
+{{ end }}
