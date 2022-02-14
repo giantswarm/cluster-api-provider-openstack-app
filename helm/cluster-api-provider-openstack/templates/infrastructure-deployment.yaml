@@ -13,7 +13,7 @@ spec:
   selector:
     matchLabels:
       component: capo-controller-manager
-      {{- include "labels.infrastructure" . | nindent 6 }}
+      {{- include "labels.selector" . | nindent 6 }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
