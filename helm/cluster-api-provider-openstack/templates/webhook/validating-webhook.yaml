@@ -1,3 +1,0 @@
-{{ if eq (include "resource.app.unique" .) "false" }}
-
-{{ end }}

@@ -1,4 +1,3 @@
-{{ if eq (include "resource.app.unique" .) "false" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,10 +57,14 @@ spec:
         resources:
           limits:
             cpu: 1
-            memory: 1GB
+            memory: 1Gi
           requests:
             cpu: 1
-            memory: 1GB
+            memory: 1Gi
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 1000
+          runAsNonRoot: true
         volumeMounts:
           - mountPath: /tmp/k8s-webhook-server/serving-certs
             name: cert
@@ -71,9 +74,6 @@ spec:
             readOnly: true
       securityContext:
         fsGroup: 1000
-        readOnlyRootFilesystem: true
-        runAsUser: 1000
-        runAsNonRoot: true
       serviceAccountName: {{ include "resource.default.name" . }}
       tolerations:
       - effect: NoSchedule
@@ -100,4 +100,3 @@ spec:
           secret:
             defaultMode: 420
             secretName: capo-manager-token-6ddl7
-{{ end }}

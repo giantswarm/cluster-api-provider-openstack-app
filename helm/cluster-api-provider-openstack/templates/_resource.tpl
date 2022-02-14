@@ -29,7 +29,3 @@ giantswarm
 {{- define "resource.app.version" -}}
 {{- .Chart.AppVersion | quote -}}
 {{- end -}}
-
-{{- define "resource.app.unique" -}}
-{{- if eq $.Chart.Name $.Release.Name }}true{{ else }}false{{ end }}
-{{- end -}}
