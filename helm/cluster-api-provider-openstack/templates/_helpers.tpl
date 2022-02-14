@@ -16,20 +16,10 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Infrastructure labels
-*/}}
-{{- define "labels.infrastructure" -}}
-{{ include "labels.common" . }}
-cluster.x-k8s.io/provider: infrastructure-aws
-{{- end -}}
-
-{{/*
 Common labels
 */}}
 {{- define "labels.common" -}}
 {{ include "labels.selector" . }}
-app.kubernetes.io/name: {{ include "name" . | quote }}
-app.kubernetes.io/instance: {{ .Release.Name | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 helm.sh/chart: {{ include "chart" . | quote }}

@@ -6,7 +6,7 @@ metadata:
     prometheus.io/scrape: "true"
   labels:
     component: capo-controller-manager
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}-metrics
   namespace: {{ include "resource.default.namespace" . }}
 spec:

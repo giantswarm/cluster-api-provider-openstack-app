@@ -5,7 +5,7 @@ metadata:
   labels:
     component: capo-controller-manager
     cluster.x-k8s.io/provider: infrastructure-openstack
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}
   namespace: {{ include "resource.default.namespace" . }}
 spec:
@@ -23,7 +23,7 @@ spec:
     metadata:
       labels:
         component: capo-controller-manager
-        {{- include "labels.infrastructure" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     spec:
       containers:
       - args:

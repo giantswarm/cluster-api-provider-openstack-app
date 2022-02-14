@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     component: capo-controller-manager-webhook
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}-webhook
   namespace: {{ include "resource.default.namespace" . }}
 spec:

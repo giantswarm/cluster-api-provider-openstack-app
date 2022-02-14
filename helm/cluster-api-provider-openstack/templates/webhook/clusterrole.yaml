@@ -3,5 +3,5 @@ kind: ClusterRole
 metadata:
   creationTimestamp: null
   labels:
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}-webhook

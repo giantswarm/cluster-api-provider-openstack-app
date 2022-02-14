@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
   name: {{ include "resource.default.name" . }}-manager
 roleRef:
   apiGroup: rbac.authorization.k8s.io
