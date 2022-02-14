@@ -1,21 +1,11 @@
 name: cluster-api-provider-openstack
 tag: v0.4.0
 
-
-project:
-  branch: "[[ .Branch ]]"
-  commit: "[[ .SHA ]]"
-
-
-name: cluster-api-provider-openstack
-tag: v0.4.0
-
 infrastructure:
   image:
     name: giantswarm/cluster-api-openstack-controller
 
 crdConvertOnly: true
-
 
 ports:
   healthz: 9440
