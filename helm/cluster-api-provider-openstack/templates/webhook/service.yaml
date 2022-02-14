@@ -12,4 +12,4 @@ spec:
     targetPort: webhook-server
   selector:
     component: capo-controller-manager-webhook
-    {{- include "labels.infrastructure" . | nindent 4 }}
+    {{- include "labels.selector" . | nindent 4 }}

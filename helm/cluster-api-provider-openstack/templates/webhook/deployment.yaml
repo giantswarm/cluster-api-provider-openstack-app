@@ -13,7 +13,7 @@ spec:
   selector:
     matchLabels:
       component: capo-controller-manager
-      {{- include "labels.infrastructure" . | nindent 6 }}
+      {{- include "labels.selector" . | nindent 6 }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -54,7 +54,14 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
-            scheme: HTTP    
+            scheme: HTTP   
+        resources:
+          limits:
+            cpu: 1
+            memory: 1GB
+          requests:
+            cpu: 1
+            memory: 1GB 
         volumeMounts:
           - mountPath: /tmp/k8s-webhook-server/serving-certs
             name: cert
@@ -64,8 +71,10 @@ spec:
             readOnly: true
       securityContext:
         fsGroup: 1000
+        readOnlyRootFilesystem: true
+        runAsUser: 1000
+        runAsNonRoot: true
       serviceAccountName: {{ include "resource.default.name" . }}
-      serviceAccount: {{ include "resource.default.name" . }}
       tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
