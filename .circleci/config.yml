@@ -21,7 +21,7 @@ workflows:
       - architect/push-to-app-collection:
           name: openstack-app-collection
           context: "architect"
-          app_name: "cluster-api-provider-openstack-app"
+          app_name: "cluster-api-provider-openstack"
           app_collection_repo: "openstack-app-collection"
           requires:
             - push-to-control-plane-app-catalog
