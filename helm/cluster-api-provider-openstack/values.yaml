@@ -1,0 +1,19 @@
+tag: v0.4.0
+
+infrastructure:
+  image:
+    name: giantswarm/cluster-api-openstack-controller
+
+crdConvertOnly: true
+
+ports:
+  healthz: 9440
+  metrics: 8080
+  webhook: 9443
+
+watchfilter: capi
+
+serviceType: managed
+
+registry:
+  domain: docker.io

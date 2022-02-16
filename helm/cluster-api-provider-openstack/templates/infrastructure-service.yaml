@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    component: capo-controller-manager
+    {{- include "labels.common" . | nindent 4 }}
+  name: {{ include "resource.default.name" . }}-metrics
+  namespace: {{ include "resource.default.namespace" . }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.ports.metrics }}
+    targetPort: http
+  selector:
+    component: capo-controller-manager
+    {{- include "labels.selector" . | nindent 4 }}
