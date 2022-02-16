@@ -1,0 +1,24 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "resource.default.name" . }}-webhook
+  namespace: {{ include "resource.default.namespace" . }}
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "labels.common" . | nindent 6 }}
+  egress:
+  - {}
+  ingress:
+  - ports:
+    - port: {{ .Values.ports.metrics }}
+      protocol: TCP
+    - port: {{ .Values.ports.webhook }}
+      protocol: TCP
+    - port: {{ .Values.ports.healthz }}
+      protocol: TCP
+  policyTypes:
+  - Egress
+  - Ingress
