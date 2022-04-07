@@ -21,3 +21,4 @@ serviceType: managed
 
 registry:
   domain: docker.io
+  
