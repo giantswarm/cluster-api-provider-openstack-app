@@ -7952,10 +7952,23 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
           readOnly: true
+      securityContext:
+        fsGroup: 1000
       serviceAccountName: capo-manager
       terminationGracePeriodSeconds: 10
       tolerations:
