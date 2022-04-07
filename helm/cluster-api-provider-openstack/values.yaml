@@ -11,6 +11,10 @@ ports:
   metrics: 8080
   webhook: 9443
 
+project:
+  branch: "[[ .Branch ]]"
+  commit: "[[ .SHA ]]"
+
 watchfilter: capi
 
 serviceType: managed
