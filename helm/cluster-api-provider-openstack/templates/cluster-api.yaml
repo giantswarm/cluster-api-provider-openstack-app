@@ -7934,8 +7934,7 @@ spec:
         - --metrics-bind-addr=127.0.0.1:8080
         command:
         - /manager
-        image: '{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name
-          }}:{{ .Values.tag }}'
+        image: '{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}:{{.Values.tag}}'
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
