@@ -1,8 +1,8 @@
-tag: v0.4.0
+tag: v0.5.3
 
 infrastructure:
   image:
-    name: giantswarm/cluster-api-openstack-controller
+    name: capi-openstack/capi-openstack-controller
 
 crdConvertOnly: true
 
@@ -20,4 +20,4 @@ watchfilter: capi
 serviceType: managed
 
 registry:
-  domain: docker.io
+  domain: k8s.gcr.io
