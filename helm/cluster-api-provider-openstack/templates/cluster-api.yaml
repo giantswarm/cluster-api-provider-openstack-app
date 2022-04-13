@@ -43,10 +43,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
-    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
-    app.giantswarm.io/instance: '{{ .Release.Name }}'
-    app.giantswarm.io/managed-by: '{{ .Release.Service }}'
+  {{- include "labels.common" . | nindent 4 }}
     cluster.x-k8s.io/provider: infrastructure-openstack
     control-plane: capo-controller-manager-mario
   name: capo-controller-manager-mario
@@ -55,11 +52,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+  {{- include "labels.selector" . | nindent 6 }}
       cluster.x-k8s.io/provider: infrastructure-openstack
       control-plane: capo-controller-manager-mario
   template:
     metadata:
       labels:
+    {{- include "labels.selector" . | nindent 8 }}
         cluster.x-k8s.io/provider: infrastructure-openstack
         control-plane: capo-controller-manager-mario
     spec:

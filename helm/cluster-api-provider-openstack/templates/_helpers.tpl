@@ -1,5 +1,3 @@
-# TEMPLATE-APP: This is set as a reasonable default, feel free to change.
-
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
@@ -19,11 +17,13 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "labels.common" -}}
+app: {{ include "name" . | quote }}
 {{ include "labels.selector" . }}
+app.giantswarm.io/branch: {{ .Values.project.branch | quote }}
+app.giantswarm.io/commit: {{ .Values.project.commit | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 helm.sh/chart: {{ include "chart" . | quote }}
-giantswarm.io/service-type: {{ .Values.serviceType }}
 {{- end -}}
 
 {{/*
