@@ -2,72 +2,84 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
+    helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-system-mario
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
+    helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-manager
   namespace: capo-system-mario
 ---
-apiVersion: cert-manager.io/v1
-kind: Certificate
+apiVersion: v1
+kind: Service
 metadata:
   labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
-  name: capo-serving-cert
+    helm.sh/chart: '{{ .Chart.Name }}'
+  name: capo-webhook-service
   namespace: capo-system-mario
 spec:
-  dnsNames:
-  - capo-webhook-service.capo-system-mario.svc
-  - capo-webhook-service.capo-system-mario.svc.cluster.local
-  issuerRef:
-    kind: Issuer
-    name: capo-selfsigned-issuer
-  secretName: capo-webhook-service-cert
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  labels:
+  ports:
+  - port: 443
+    targetPort: webhook-server
+  selector:
     cluster.x-k8s.io/provider: infrastructure-openstack
-  name: capo-selfsigned-issuer
-  namespace: capo-system-mario
-spec:
-  selfSigned: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-  {{- include "labels.common" . | nindent 4 }}
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
-    control-plane: capo-controller-manager-mario
-  name: capo-controller-manager-mario
+    control-plane: capo-controller-manager
+    helm.sh/chart: '{{ .Chart.Name }}'
+  name: capo-controller-manager
   namespace: capo-system-mario
 spec:
   replicas: 1
   selector:
     matchLabels:
-  {{- include "labels.selector" . | nindent 6 }}
       cluster.x-k8s.io/provider: infrastructure-openstack
-      control-plane: capo-controller-manager-mario
+      control-plane: capo-controller-manager
   template:
     metadata:
       labels:
-    {{- include "labels.selector" . | nindent 8 }}
         cluster.x-k8s.io/provider: infrastructure-openstack
-        control-plane: capo-controller-manager-mario
+        control-plane: capo-controller-manager
     spec:
       containers:
       - args:
         - --leader-elect
         - --v=2
         - --metrics-bind-addr=127.0.0.1:8080
-        - --namespace=capo-system-mario
         command:
         - /manager
         image: '{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}:{{.Values.tag}}'
@@ -115,3 +127,43 @@ spec:
         secret:
           defaultMode: 420
           secretName: capo-webhook-service-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+    cluster.x-k8s.io/provider: infrastructure-openstack
+    helm.sh/chart: '{{ .Chart.Name }}'
+  name: capo-serving-cert
+  namespace: capo-system-mario
+spec:
+  dnsNames:
+  - capo-webhook-service.capo-system-mario.svc
+  - capo-webhook-service.capo-system-mario.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: capo-selfsigned-issuer
+  secretName: capo-webhook-service-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+    cluster.x-k8s.io/provider: infrastructure-openstack
+    helm.sh/chart: '{{ .Chart.Name }}'
+  name: capo-selfsigned-issuer
+  namespace: capo-system-mario
+spec:
+  selfSigned: {}
