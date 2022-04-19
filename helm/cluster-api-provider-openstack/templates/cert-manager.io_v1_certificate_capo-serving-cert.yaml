@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+    cluster.x-k8s.io/provider: infrastructure-openstack
+    helm.sh/chart: '{{ .Chart.Name }}'
+  name: capo-serving-cert
+  namespace: capo-system
+spec:
+  dnsNames:
+  - capo-webhook-service.capo-system.svc
+  - capo-webhook-service.capo-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: capo-selfsigned-issuer
+  secretName: capo-webhook-service-cert

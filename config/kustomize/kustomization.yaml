@@ -1,0 +1,36 @@
+resources:
+  - origin/infrastructure-components.yaml
+
+images:
+- name: giantswarm/kaas/capi-openstack-controller:dev
+  # once https://github.com/kubernetes-sigs/kustomize/issues/947 is solved
+  # we could change back to a more well formated line
+  # e.g.:
+  #   newName: '{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name }}'
+  #   newTag: '{{ .Values.tag }}'
+  newName: '{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}'
+  newTag: '{{.Values.tag}}'
+
+patchesJson6902:
+
+# add giantswarm specific labels
+# ~1 must be used to escape / - https://github.com/kubernetes-sigs/kustomize/issues/907
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: capo-controller-manager
+    namespace: capo-system
+  patch: |-
+    - op: add
+      path: /metadata/labels/app.giantswarm.io~1branch
+      value: '{{ .Values.project.branch }}'
+    - op: add
+      path: /metadata/labels/app.giantswarm.io~1commit
+      value: '{{ .Values.project.commit }}'
+    - op: add
+      path: /metadata/labels/app.giantswarm.io~1instance
+      value: '{{ .Release.Name }}'
+    - op: add
+      path: /metadata/labels/app.giantswarm.io~1managed-by
+      value: '{{ .Release.Service }}'
