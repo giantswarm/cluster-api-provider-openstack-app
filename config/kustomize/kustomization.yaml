@@ -66,31 +66,6 @@ patchesJson6902:
       kind: ClusterRoleBinding
       name: capo-manager-rolebinding
     path: patches/giantswarm-common-labels.yaml
-  # patch CRDs
-  - target:
-      group: apiextensions.k8s.io
-      version: v1
-      kind: CustomResourceDefinition
-      name: openstackmachines.infrastructure.cluster.x-k8s.io
-    path: patches/giantswarm-common-labels.yaml
-  - target:
-      group: apiextensions.k8s.io
-      version: v1
-      kind: CustomResourceDefinition
-      name: openstackmachinetemplates.infrastructure.cluster.x-k8s.io
-    path: patches/giantswarm-common-labels.yaml
-  - target:
-      group: apiextensions.k8s.io
-      version: v1
-      kind: CustomResourceDefinition
-      name: openstackclusters.infrastructure.cluster.x-k8s.io
-    path: patches/giantswarm-common-labels.yaml
-  - target:
-      group: apiextensions.k8s.io
-      version: v1
-      kind: CustomResourceDefinition
-      name: openstackclustertemplates.infrastructure.cluster.x-k8s.io
-    path: patches/giantswarm-common-labels.yaml
   # patch certmanager manifests
   - target:
       group: cert-manager.io

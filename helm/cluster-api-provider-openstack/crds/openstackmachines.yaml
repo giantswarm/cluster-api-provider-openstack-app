@@ -5,17 +5,10 @@ metadata:
     cert-manager.io/inject-ca-from: capo-system/capo-serving-cert
     controller-gen.kubebuilder.io/version: v0.7.0
   labels:
-    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
-    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
-    app.kubernetes.io/instance: '{{ .Release.Name }}'
-    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
-    app.kubernetes.io/name: '{{ .Chart.Name }}'
-    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
     cluster.x-k8s.io/v1alpha3: v1alpha3
     cluster.x-k8s.io/v1alpha4: v1alpha4
     cluster.x-k8s.io/v1beta1: v1alpha5
-    helm.sh/chart: '{{ .Chart.Name }}'
   name: openstackmachines.infrastructure.cluster.x-k8s.io
 spec:
   conversion:
