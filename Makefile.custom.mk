@@ -20,13 +20,5 @@ apply-kustomize-patches: ## apply giantswarm specific patches
 
 .PHONY: helm-chart
 helm-chart: ## finalize the helm-chart
-	# as we apply the crd via configmap, name must be stripped to be RFC 1123 conform (lower case alphanumeric characters or '-', and must start and end with an alphanumeric character)
-	find config/kustomize/tmp/ -name "apiextensions.k8s.io_v1_customresourcedefinition*" | while read f; do \
-		mv -v $${f} helm/${APPLICATION_NAME}/crds/$${f/config\/kustomize\/tmp\/apiextensions.k8s.io_v1_customresourcedefinition_/}; \
-	done
-
-	find helm/${APPLICATION_NAME}/crds/ -name "*infrastructure.cluster.x-k8s.io.yaml" | while read f; do \
-		mv -v $${f} $${f/infrastructure.cluster.x-k8s.io./}; \
-	done
-	
-	mv -v config/kustomize/tmp/* helm/${APPLICATION_NAME}/templates
+	# move files from workdir over to helm directury structure
+	./hack/prepare-helmchart.sh ${APPLICATION_NAME}

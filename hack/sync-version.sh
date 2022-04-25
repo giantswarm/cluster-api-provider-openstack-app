@@ -10,7 +10,7 @@ TMPDIR=$(mktemp -d)
 pushd "${TMPDIR}"
 
 git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
-cd cluster-api-provider-openstack
+pushd cluster-api-provider-openstack
 
 if [[ ${2} == "tag" ]]; then
 	git checkout tags/"${CAPO_SYNC_BRANCH}" -b "${CAPO_SYNC_BRANCH}"
@@ -21,8 +21,10 @@ fi
 # RELEASE_TAG and REGISTRY are only defined to have more unique strings to replace later via kustomize
 RELEASE_TAG="dev" REGISTRY="giantswarm/kaas" make release-manifests
 
-cd .. # ??
+# remote cluster-api-provider-openstack from the stack
+popd
 
+# remote $TMPDIR from the stack
 popd
 
 # copy upstream generated release-manifests into origin
