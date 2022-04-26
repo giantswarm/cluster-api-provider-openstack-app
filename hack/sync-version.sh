@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
 cd "$(dirname "${0}")"
 CAPO_SYNC_BRANCH=${1:-"main"}
@@ -12,7 +12,7 @@ pushd "${TMPDIR}"
 git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
 pushd cluster-api-provider-openstack
 
-if [[ ${2} == "tag" ]]; then
+if [[ -n "${2}" && "${2}" == "tag" ]]; then
 	git checkout tags/"${CAPO_SYNC_BRANCH}" -b "${CAPO_SYNC_BRANCH}"
 else
 	git checkout "${CAPO_SYNC_BRANCH}"
