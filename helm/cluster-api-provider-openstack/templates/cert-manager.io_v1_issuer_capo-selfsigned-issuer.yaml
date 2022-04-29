@@ -11,6 +11,6 @@ metadata:
     cluster.x-k8s.io/provider: infrastructure-openstack
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-selfsigned-issuer
-  namespace: capo-system
+  namespace: giantswarm
 spec:
   selfSigned: {}

@@ -12,7 +12,7 @@ metadata:
     control-plane: capo-controller-manager
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-controller-manager
-  namespace: capo-system
+  namespace: giantswarm
 spec:
   replicas: 1
   selector:

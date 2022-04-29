@@ -18,4 +18,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: capo-manager
-  namespace: capo-system
+  namespace: giantswarm

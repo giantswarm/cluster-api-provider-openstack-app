@@ -11,7 +11,7 @@ metadata:
     cluster.x-k8s.io/provider: infrastructure-openstack
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-leader-election-rolebinding
-  namespace: capo-system
+  namespace: giantswarm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -19,4 +19,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: capo-manager
-  namespace: capo-system
+  namespace: giantswarm
