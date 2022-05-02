@@ -7,12 +7,14 @@ find config/kustomize/tmp/ -type f | while read f; do
 	sed -i 's/capo-system/giantswarm/g' ${f}
 done
 
+# delete namespace manifest as we deploy everything into giantswarm
 find config/kustomize/tmp -regex ".*namespace.*" -delete
 
 # as we apply the crd via configmap, name must be stripped to be RFC 1123 conform
 # (lower case alphanumeric characters or '-', and must start and end with an alphanumeric character)
 find config/kustomize/tmp/ -regex ".*apiextensions.k8s.io_v1_customresourcedefinition.*" | while read f; do
-	mv -v ${f} helm/${1}/crds/${f/config\/kustomize\/tmp\/apiextensions.k8s.io_v1_customresourcedefinition_/}
+	filename=$(basename ${f})
+	mv -v config/kustomize/tmp/${filename} helm/${1}/crds/${filename/apiextensions.k8s.io_v1_customresourcedefinition_/}
 done
 
 find helm/${1}/crds/ -regex ".*infrastructure.cluster.x-k8s.io.yaml" | while read f; do
