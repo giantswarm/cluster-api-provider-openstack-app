@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 APPLICATION_NAME="cluster-api-provider-openstack"
 
-CAPO_VERSION="v0.5.3"
+CAPO_VERSION="v0.6.1"
 
 .PHONY: all
 all: fetch-upstream-manifest apply-kustomize-patches delete-generated-helm-charts release-manifests ## Builds the manifests to publish with a release (alias to release-manifests)
