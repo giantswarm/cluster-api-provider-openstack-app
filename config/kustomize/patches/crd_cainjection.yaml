@@ -5,4 +5,4 @@ kind: CustomResourceDefinition
 metadata:
   name: "ignored" # not relevant as we are applying this patch to all CAPO CRDs via labelSelector
   annotations:
-    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/capo-serving-cert'
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/capo-serving-cert"

@@ -6,8 +6,8 @@ metadata:
   namespace: capo-system
 spec:
   dnsNames:
-  - capo-webhook-service.{{ .Release.Namespace }}.svc
-  - capo-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+    - capo-webhook-service.{{ .Release.Namespace }}.svc
+    - capo-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer

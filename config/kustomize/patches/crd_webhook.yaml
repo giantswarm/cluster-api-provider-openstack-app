@@ -9,14 +9,14 @@ spec:
     strategy: Webhook
     webhook:
       conversionReviewVersions:
-      - v1
-      - v1beta1
+        - v1
+        - v1beta1
       clientConfig:
         # this is "\n" used as a placeholder, otherwise it will be rejected by the apiserver for being blank,
         # but we're going to set it later using the cert-manager (or potentially a patch if not using cert-manager)
         caBundle: Cg==
         service:
-          namespace: '{{ .Release.Namespace }}'
+          namespace: "{{ .Release.Namespace }}"
           name: capo-webhook-service
           path: /convert
           port: 443
