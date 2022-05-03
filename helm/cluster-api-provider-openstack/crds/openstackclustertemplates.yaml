@@ -2,13 +2,20 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: giantswarm/capo-serving-cert
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/capo-serving-cert'
     controller-gen.kubebuilder.io/version: v0.7.0
   labels:
+    app.giantswarm.io/branch: '{{ .Values.project.branch }}'
+    app.giantswarm.io/commit: '{{ .Values.project.commit }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: '{{ .Chart.Name }}'
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     cluster.x-k8s.io/provider: infrastructure-openstack
     cluster.x-k8s.io/v1alpha3: v1alpha3
     cluster.x-k8s.io/v1alpha4: v1alpha4
     cluster.x-k8s.io/v1beta1: v1alpha4
+    helm.sh/chart: '{{ .Chart.Name }}'
   name: openstackclustertemplates.infrastructure.cluster.x-k8s.io
 spec:
   conversion:
@@ -18,8 +25,9 @@ spec:
         caBundle: Cg==
         service:
           name: capo-webhook-service
-          namespace: giantswarm
+          namespace: '{{ .Release.Namespace }}'
           path: /convert
+          port: 443
       conversionReviewVersions:
       - v1
       - v1beta1

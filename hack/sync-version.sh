@@ -12,7 +12,7 @@ pushd "${TMPDIR}"
 git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
 pushd cluster-api-provider-openstack
 
-if [[ ${2} == "tag" ]]; then
+if [[ -n "${2}" && "${2}" == "tag" ]]; then
 	git checkout tags/"${CAPO_SYNC_BRANCH}" -b "${CAPO_SYNC_BRANCH}"
 else
 	git checkout "${CAPO_SYNC_BRANCH}"
@@ -28,4 +28,4 @@ popd
 popd
 
 # copy upstream generated release-manifests into origin
-cp -v "${TMPDIR}/cluster-api-provider-openstack/out/infrastructure-components.yaml" "../config/kustomize/origin/"
+cp -v "${TMPDIR}/cluster-api-provider-openstack/out/infrastructure-components.yaml" "../config/kustomize/input/"

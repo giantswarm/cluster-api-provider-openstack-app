@@ -12,7 +12,7 @@ metadata:
     control-plane: capo-controller-manager
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-controller-manager
-  namespace: giantswarm
+  namespace: '{{ .Release.Namespace }}'
 spec:
   replicas: 1
   selector:
@@ -29,6 +29,7 @@ spec:
       - args:
         - --leader-elect
         - --v=2
+        - --metrics-bind-addr=127.0.0.1:8080
         command:
         - /manager
         image: '{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}:{{.Values.tag}}'
@@ -39,6 +40,9 @@ spec:
             port: healthz
         name: manager
         ports:
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
         - containerPort: 9443
           name: webhook-server
           protocol: TCP
@@ -51,10 +55,10 @@ spec:
             port: healthz
         resources:
           limits:
-            cpu: 1
+            cpu: 0.5
             memory: 1Gi
           requests:
-            cpu: 1
+            cpu: 0.5
             memory: 1Gi
         securityContext:
           readOnlyRootFilesystem: true

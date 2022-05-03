@@ -11,10 +11,14 @@ metadata:
     cluster.x-k8s.io/provider: infrastructure-openstack
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-webhook-service
-  namespace: giantswarm
+  namespace: '{{ .Release.Namespace }}'
 spec:
   ports:
-  - port: 443
+  - name: metrics
+    port: 8080
+    targetPort: metrics
+  - name: webhook-server
+    port: 443
     targetPort: webhook-server
   selector:
     cluster.x-k8s.io/provider: infrastructure-openstack

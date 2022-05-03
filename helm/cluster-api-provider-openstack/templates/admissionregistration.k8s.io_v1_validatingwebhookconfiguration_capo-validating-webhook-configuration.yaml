@@ -2,7 +2,7 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: giantswarm/capo-serving-cert
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/capo-serving-cert'
   labels:
     app.giantswarm.io/branch: '{{ .Values.project.branch }}'
     app.giantswarm.io/commit: '{{ .Values.project.commit }}'
@@ -19,7 +19,7 @@ webhooks:
   clientConfig:
     service:
       name: capo-webhook-service
-      namespace: giantswarm
+      namespace: '{{ .Release.Namespace }}'
       path: /validate-infrastructure-cluster-x-k8s-io-v1alpha4-openstackcluster
   failurePolicy: Fail
   matchPolicy: Equivalent
@@ -40,7 +40,7 @@ webhooks:
   clientConfig:
     service:
       name: capo-webhook-service
-      namespace: giantswarm
+      namespace: '{{ .Release.Namespace }}'
       path: /validate-infrastructure-cluster-x-k8s-io-v1alpha4-openstackclustertemplate
   failurePolicy: Fail
   matchPolicy: Equivalent
@@ -61,7 +61,7 @@ webhooks:
   clientConfig:
     service:
       name: capo-webhook-service
-      namespace: giantswarm
+      namespace: '{{ .Release.Namespace }}'
       path: /validate-infrastructure-cluster-x-k8s-io-v1alpha4-openstackmachine
   failurePolicy: Fail
   matchPolicy: Equivalent
@@ -82,7 +82,7 @@ webhooks:
   clientConfig:
     service:
       name: capo-webhook-service
-      namespace: giantswarm
+      namespace: '{{ .Release.Namespace }}'
       path: /validate-infrastructure-cluster-x-k8s-io-v1alpha4-openstackmachinetemplate
   failurePolicy: Fail
   matchPolicy: Equivalent

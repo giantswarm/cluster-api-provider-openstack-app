@@ -11,12 +11,13 @@ metadata:
     cluster.x-k8s.io/provider: infrastructure-openstack
     helm.sh/chart: '{{ .Chart.Name }}'
   name: capo-serving-cert
-  namespace: giantswarm
+  namespace: '{{ .Release.Namespace }}'
 spec:
   dnsNames:
-  - capo-webhook-service.giantswarm.svc
-  - capo-webhook-service.giantswarm.svc.cluster.local
+  - capo-webhook-service.{{ .Release.Namespace }}.svc
+  - capo-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
   issuerRef:
-    kind: Issuer
-    name: capo-selfsigned-issuer
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: selfsigned-giantswarm
   secretName: capo-webhook-service-cert
