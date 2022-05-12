@@ -11,5 +11,5 @@ project:
   commit: "[[ .SHA ]]"
 
 crds:
-  install: true
+  install: false
   jobRegistry: quay.io
