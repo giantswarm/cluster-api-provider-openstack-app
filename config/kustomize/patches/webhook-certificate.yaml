@@ -1,0 +1,14 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: capo-mutating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/capo-serving-cert"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: capo-validating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/capo-serving-cert"

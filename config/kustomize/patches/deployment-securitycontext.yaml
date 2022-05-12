@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capo-controller-manager
+  namespace: capo-system
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: manager
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsUser: 1000
+            runAsNonRoot: true

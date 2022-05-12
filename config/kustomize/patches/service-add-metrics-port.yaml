@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: capo-system
+  name: capo-webhook-service
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: metrics
+    - name: webhook-server
+      port: 443
+      targetPort: webhook-server

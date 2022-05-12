@@ -2,8 +2,8 @@ apiVersion: v1
 name: cluster-api-provider-openstack
 description: Helm chart for cluster-api-provider-openstack.
 home: https://github.com/giantswarm/cluster-api-provider-openstack-app
-version: 0.0.0
-appVersion: 0.0.0
+version: "[[ .Version ]]"
+appVersion: "[[ .AppVersion ]]"
 annotations:
   application.giantswarm.io/team: rocket
-  config.giantswarm.io/version: 1.x.x
+  config.giantswarm.io/version: 0.1.0

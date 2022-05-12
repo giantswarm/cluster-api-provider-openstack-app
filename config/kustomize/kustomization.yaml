@@ -1,0 +1,40 @@
+namespace: "{{ .Release.Namespace }}"
+
+resources:
+  - input/infrastructure-components.yaml
+
+images:
+  - name: giantswarm/kaas/capi-openstack-controller:dev
+    # once https://github.com/kubernetes-sigs/kustomize/issues/947 is solved
+    # we could change back to a more well formated line
+    # e.g.:
+    #   newName: '{{ .Values.registry.domain }}/{{ .Values.infrastructure.image.name }}'
+    #   newTag: '{{ .Values.tag }}'
+    newName: "{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}"
+    newTag: "{{.Values.tag}}"
+
+transformers:
+  - patches/common-labels.yaml
+  - patches/webhook-prefix.yaml
+  - patches/monitoring-annotations.yaml
+
+patchesStrategicMerge:
+  - patches/delete-namespace.yaml
+  - patches/certificate.yaml
+  - patches/webhook-certificate.yaml
+  - patches/delete-issuer.yaml
+  - patches/deployment-args.yaml
+  - patches/deployment-metrics-port.yaml
+  - patches/deployment-securitycontext.yaml
+  - patches/deployment-resources.yaml
+  - patches/service-add-metrics-port.yaml
+
+patches:
+  - path: patches/crd_cainjection.yaml
+    target:
+      kind: CustomResourceDefinition
+      labelSelector: cluster.x-k8s.io/provider=infrastructure-openstack
+  - path: patches/crd_webhook.yaml
+    target:
+      kind: CustomResourceDefinition
+      labelSelector: cluster.x-k8s.io/provider=infrastructure-openstack
