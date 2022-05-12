@@ -12,11 +12,7 @@ pushd "${TMPDIR}"
 git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
 pushd cluster-api-provider-openstack
 
-if [[ -n "${2}" && "${2}" == "tag" ]]; then
-	git checkout tags/"${CAPO_SYNC_BRANCH}" -b "${CAPO_SYNC_BRANCH}"
-else
-	git checkout "${CAPO_SYNC_BRANCH}"
-fi
+git checkout -d "${CAPO_SYNC_BRANCH}"
 
 # RELEASE_TAG and REGISTRY are only defined to have more unique strings to replace later via kustomize
 RELEASE_TAG="dev" REGISTRY="giantswarm/kaas" make release-manifests

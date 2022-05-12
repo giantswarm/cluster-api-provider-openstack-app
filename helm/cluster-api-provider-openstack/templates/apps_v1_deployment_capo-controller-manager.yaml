@@ -29,7 +29,7 @@ spec:
       - args:
         - --leader-elect
         - --v=2
-        - --metrics-bind-addr=127.0.0.1:8080
+        - --metrics-bind-addr=0.0.0.0:8080
         command:
         - /manager
         image: '{{.Values.registry.domain}}/{{.Values.infrastructure.image.name}}:{{.Values.tag}}'

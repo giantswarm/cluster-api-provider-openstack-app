@@ -17,7 +17,7 @@ release-manifests: fetch-upstream-manifest apply-kustomize-patches delete-genera
 .PHONY: fetch-upstream-manifest
 fetch-upstream-manifest: ## fetch upstream manifest from
 	# fetch upstream released manifest yaml
-	./hack/sync-version.sh ${CAPO_VERSION} tag
+	./hack/sync-version.sh ${CAPO_VERSION}
 
 .PHONY: apply-kustomize-patches
 apply-kustomize-patches: ## apply giantswarm specific patches
