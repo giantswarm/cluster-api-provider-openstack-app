@@ -27,6 +27,7 @@ patchesStrategicMerge:
   - patches/deployment-metrics-port.yaml
   - patches/deployment-securitycontext.yaml
   - patches/deployment-resources.yaml
+  - patches/deployment-imagepullpolicy.yaml
   - patches/service-add-metrics-port.yaml
 
 patches:

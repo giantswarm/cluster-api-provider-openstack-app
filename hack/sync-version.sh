@@ -9,10 +9,11 @@ CAPO_SYNC_BRANCH=${1:-"main"}
 TMPDIR=$(mktemp -d)
 pushd "${TMPDIR}"
 
-git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
+#git clone https://github.com/kubernetes-sigs/cluster-api-provider-openstack.git
+git clone https://github.com/giantswarm/cluster-api-provider-openstack.git
 pushd cluster-api-provider-openstack
 
-git checkout -d "${CAPO_SYNC_BRANCH}"
+git checkout "${CAPO_SYNC_BRANCH}"
 
 # RELEASE_TAG and REGISTRY are only defined to have more unique strings to replace later via kustomize
 RELEASE_TAG="dev" REGISTRY="giantswarm/kaas" make release-manifests

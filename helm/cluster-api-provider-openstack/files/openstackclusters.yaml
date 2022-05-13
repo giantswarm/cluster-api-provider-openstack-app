@@ -2534,9 +2534,15 @@ spec:
                 properties:
                   additionalPorts:
                     description: AdditionalPorts adds additional tcp ports to the
-                      Loadbalacner
+                      Loadbalancer
                     items:
                       type: integer
+                    type: array
+                  allowedCidrs:
+                    description: AllowedCIDRs restrict access to all API-Server listeners
+                      to the given addresses
+                    items:
+                      type: string
                     type: array
                   enabled:
                     description: Enabled defines whether a LoadBalancer should be
@@ -3149,6 +3155,10 @@ spec:
                             because this field is optional and therefore not set in
                             all cases
                           properties:
+                            allowedCIDRs:
+                              items:
+                                type: string
+                              type: array
                             id:
                               type: string
                             internalIP:
@@ -3304,6 +3314,11 @@ spec:
                           properties:
                             id:
                               type: string
+                            ips:
+                              description: 'TODO: how optional should this be?'
+                              items:
+                                type: string
+                              type: array
                             name:
                               type: string
                             tags:
@@ -3486,6 +3501,10 @@ spec:
                     description: Be careful when using APIServerLoadBalancer, because
                       this field is optional and therefore not set in all cases
                     properties:
+                      allowedCIDRs:
+                        items:
+                          type: string
+                        type: array
                       id:
                         type: string
                       internalIP:
@@ -3638,6 +3657,11 @@ spec:
                     properties:
                       id:
                         type: string
+                      ips:
+                        description: 'TODO: how optional should this be?'
+                        items:
+                          type: string
+                        type: array
                       name:
                         type: string
                       tags:
@@ -3734,6 +3758,10 @@ spec:
                     description: Be careful when using APIServerLoadBalancer, because
                       this field is optional and therefore not set in all cases
                     properties:
+                      allowedCIDRs:
+                        items:
+                          type: string
+                        type: array
                       id:
                         type: string
                       internalIP:
@@ -3886,6 +3914,11 @@ spec:
                     properties:
                       id:
                         type: string
+                      ips:
+                        description: 'TODO: how optional should this be?'
+                        items:
+                          type: string
+                        type: array
                       name:
                         type: string
                       tags:
