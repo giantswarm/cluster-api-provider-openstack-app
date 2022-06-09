@@ -4,7 +4,10 @@ SHELL := /bin/bash
 
 APPLICATION_NAME="cluster-api-provider-openstack"
 
-CAPO_VERSION="v0.5.3"
+# keep in sync with 
+# * image tag in helm/cluster-api-provider-openstack/values.yaml
+# * used capo-version in mc-bootstrap - defined in Makefile.custom.mk (https://github.com/giantswarm/mc-bootstrap/blob/main/Makefile.custom.mk)
+CAPO_VERSION="v0.6.3"
 
 .PHONY: all
 all: fetch-upstream-manifest apply-kustomize-patches delete-generated-helm-charts release-manifests ## Builds the manifests to publish with a release (alias to release-manifests)
