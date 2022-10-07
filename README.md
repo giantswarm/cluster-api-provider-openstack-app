@@ -20,7 +20,7 @@ How to work within this repository?
    > upstream manifest will be stored in [`config/kustomize/origin`](config/kustomize/origin)
 1. write your desired changes as kustomize patches in [config/kustomize]
 1. run `make apply-kustomize-patches` to apply the changes\n
-   > this will generate a patched version unter [`config/kustomize/tmp`](config/kustomize/tmp)
+   > this will generate a patched version under [`config/kustomize/tmp`](config/kustomize/tmp)
 1. once you're done, run `make release-manifests` to move all relevant files into the [`helm/cluster-api-provider-openstack`](helm/cluster-api-provider-openstack) folder
 
 ### update to a newer CAPO release

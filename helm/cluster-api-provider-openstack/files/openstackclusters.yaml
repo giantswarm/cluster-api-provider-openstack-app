@@ -15,6 +15,8 @@ metadata:
     cluster.x-k8s.io/v1alpha3: v1alpha3
     cluster.x-k8s.io/v1alpha4: v1alpha4
     cluster.x-k8s.io/v1beta1: v1alpha5
+    clusterctl.cluster.x-k8s.io: ""
+    clusterctl.cluster.x-k8s.io/move: ""
     helm.sh/chart: '{{ .Chart.Name }}'
   name: openstackclusters.infrastructure.cluster.x-k8s.io
 spec:
