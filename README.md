@@ -1,5 +1,8 @@
 [![CircleCI](https://circleci.com/gh/giantswarm/cluster-api-provider-openstack-app.svg?style=shield)](https://circleci.com/gh/giantswarm/cluster-api-provider-openstack-app)
 
+# This repo is currently UNMAINTAINED.
+**If you want to work on it, please fork.**
+
 # cluster-api-provider-openstack-app
 
 Cluster API Provider OpenStack - packaged as a Giant Swarm app.
